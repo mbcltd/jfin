@@ -10,34 +10,6 @@ package mbc.jfin
 import org.scala_tools.time.Imports._
 import mbc.jfin.datemath._
 
-sealed trait StubType {
-  def name: String
-}
-
-case object NoStub extends StubType {
-  val name = "NoStub"
-}
-
-case object ShortFirst extends StubType {
-  val name = "ShortFirst"
-}
-
-case object ShortLast extends StubType {
-  val name = "ShortLast"
-}
-
-case object LongFirst extends StubType {
-  val name = "LongFirst"
-}
-
-case object LongLast extends StubType {
-  val name = "LongLast"
-}
-
-object StubType {
-  val all: Seq[StubType] = NoStub :: ShortFirst :: ShortLast :: LongFirst :: LongLast :: Nil
-}
-
 object ScheduleGenerator {
 
   def generateSchedule(start: LocalDate, end: LocalDate, frequency: Period, stubType: StubType): Schedule = generateSchedule(start, end, frequency, stubType, Unadjusted, NoneHolidayCalendar)
