@@ -14,9 +14,9 @@ import org.scala_tools.time.Imports.Period._
 object HelloWorld extends App {
 
 
-  val scheduleGenerator = new ScheduleThang(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1)) with StartStub
+  val scheduleGenerator = new ScheduleDefinition(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1)) with LastStub with LongStub
 
-  scheduleGenerator.generateSchedule.foreach(println);
+  scheduleGenerator.generateSchedule.foreach(println)
 
 
 }
