@@ -24,7 +24,7 @@ object ScheduleGenerator {
   }
 
 
-  val convertToTuple = (dates:List[LocalDate]) => dates.drop(1).zip(dates.dropRight(1))
+  val convertToTuple = (dates:List[LocalDate]) => dates.dropRight(1).zip(dates.drop(1))
 
 }
 
