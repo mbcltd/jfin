@@ -9,7 +9,24 @@ package mbc.jfin
  */
 import org.scala_tools.time.Imports._
 import mbc.jfin.datemath._
-import org.joda.time
+
+object ScheduleGenerator {
+  def generateSchedule(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType) = {
+    val scheduleDefinition = stub match {
+      case NoStub => new ScheduleDefinition(start,end,frequency) with ShortStub with LastStub
+      case ShortFirst => new ScheduleDefinition(start,end,frequency) with ShortStub with StartStub
+      case ShortLast => new ScheduleDefinition(start,end,frequency) with ShortStub with LastStub
+      case LongFirst => new ScheduleDefinition(start,end,frequency) with LongStub with StartStub
+      case LongLast => new ScheduleDefinition(start,end,frequency) with LongStub with LastStub
+    }
+
+    convertToTuple( scheduleDefinition.generateSchedule )
+  }
+
+
+  val convertToTuple = (dates:List[LocalDate]) => dates.drop(1).zip(dates.dropRight(1))
+
+}
 
 trait ScheduleGenerator {
   def startDate:LocalDate
@@ -31,6 +48,7 @@ trait ScheduleGenerator {
     val finalDate = maybeTheEnd(point)
     finalDate.map( _ :: Nil ).getOrElse( nextDate :: generateScheduleFromPoint(point+1) )
   }
+
 }
 
 trait LastStub extends ScheduleGenerator {
