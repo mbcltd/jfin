@@ -13,9 +13,10 @@ import org.scala_tools.time.Imports.Period._
 
 object HelloWorld extends App {
 
-  val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 3, 28), years(1), NoStub)
 
-  schedule.foreach((period:CouponPeriod) => println(period.unadjusted.start.toString + " - " + period.unadjusted.end.toString ));
+  val scheduleGenerator = ScheduleThang(new LocalDate(2006, 3, 28), new LocalDate(2011, 3, 28), years(1))
+
+  scheduleGenerator.generateSchedule.foreach(println);
 
 
 }
