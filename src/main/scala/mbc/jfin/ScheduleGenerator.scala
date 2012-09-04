@@ -16,17 +16,30 @@ trait ScheduleGenerator {
   def endDate:LocalDate
   def frequency:Period
 
-  def dateForPoint(i: Int) = startDate + frequency * i
+  def dateForPoint(i: Int):LocalDate
 
-  def generateSchedule:List[LocalDate] = startDate :: generateScheduleFromPoint(1)
+  def generateSchedule:List[LocalDate]
 
-  def maybeTheEnd(date: LocalDate):Option[LocalDate] = if (date>=endDate) Some(endDate) else if (date<=startDate) Some(startDate) else None
+  def maybeTheEnd(point:Int):Option[LocalDate] = {
+    val date = dateForPoint(point)
+    if (date>=endDate) Some(endDate) else if (date<=startDate) Some(startDate) else None
+  }
 
   def generateScheduleFromPoint(point:Int):List[LocalDate] = {
     val nextDate = dateForPoint(point)
-    val finalDate = maybeTheEnd(nextDate)
+    val finalDate = maybeTheEnd(point)
     finalDate.map( _ :: Nil ).getOrElse( nextDate :: generateScheduleFromPoint(point+1) )
   }
 }
 
-case class ScheduleThang(startDate:LocalDate, endDate:LocalDate, frequency:Period) extends ScheduleGenerator
+trait LastStub extends ScheduleGenerator {
+  def dateForPoint(i: Int) = startDate + frequency * i
+  def generateSchedule:List[LocalDate] = startDate :: generateScheduleFromPoint(1)
+}
+
+trait StartStub extends ScheduleGenerator {
+  def dateForPoint(i: Int) = endDate - frequency * i
+  def generateSchedule:List[LocalDate] = (endDate :: generateScheduleFromPoint(1)).reverse
+}
+
+abstract case class ScheduleThang(startDate:LocalDate, endDate:LocalDate, frequency:Period) extends ScheduleGenerator
