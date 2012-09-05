@@ -34,7 +34,7 @@ trait TheTest {
   }
 }
 
-class UniformScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
+class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
 
   "An annual schedule with no stub from 2006-3-28 to 2011-3-28" should {
     val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 3, 28), years(1), NoStub)
@@ -92,10 +92,7 @@ class UniformScheduleSpec extends SpecificationWithJUnit with DataTables with Th
       ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1), NoStub) must throwA[AssertionError]
     }
   }
-}
 
-
-class ShortLastStubScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   "An annual schedule with a short last stub from 2006-3-28 to 2011-4-28" should {
     val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), ShortLast)
 
@@ -113,9 +110,7 @@ class ShortLastStubScheduleSpec extends SpecificationWithJUnit with DataTables w
         5 !(2011, 3, 28) !(2011, 4, 28) |> test(schedule)
     }
   }
-}
 
-class LongLastStubScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   "An annual schedule with a long last stub from 2006-3-28 to 2011-4-28" should {
     val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), LongLast)
 
@@ -132,9 +127,7 @@ class LongLastStubScheduleSpec extends SpecificationWithJUnit with DataTables wi
         4 !(2010, 3, 28) !(2011, 4, 28) |> test(schedule)
     }
   }
-}
 
-class ShortFirstStubScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   "An annual schedule with a short first stub from 2006-3-28 to 2011-4-28" should {
     val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), ShortFirst)
 
@@ -152,9 +145,7 @@ class ShortFirstStubScheduleSpec extends SpecificationWithJUnit with DataTables 
         5 !(2010, 4, 28) !(2011, 4, 28) |> test(schedule)
     }
   }
-}
 
-class LongFirstStubScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   "An annual schedule with a long first stub from 2006-3-28 to 2011-4-28" should {
     val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), LongFirst)
 
