@@ -112,11 +112,6 @@ class ShortLastStubScheduleSpec extends SpecificationWithJUnit with DataTables w
         4 !(2010, 3, 28) !(2011, 3, 28) |
         5 !(2011, 3, 28) !(2011, 4, 28) |> test(schedule)
     }
-
-//    "the stub period should have a reference start 2011-3-28 and end 2012-3-28" in {
-//      schedule(5).reference.start must be equalTo (new LocalDate(2011, 3, 28))
-//      schedule(5).reference.end must be equalTo (new LocalDate(2012, 3, 28))
-//    }
   }
 }
 
@@ -136,11 +131,6 @@ class LongLastStubScheduleSpec extends SpecificationWithJUnit with DataTables wi
         3 !(2009, 3, 28) !(2010, 3, 28) |
         4 !(2010, 3, 28) !(2011, 4, 28) |> test(schedule)
     }
-
-//    "the stub period should have a reference start 2010-3-28 and end 2011-3-28" in {
-//      schedule(4).reference.start must be equalTo (new LocalDate(2010, 3, 28))
-//      schedule(4).reference.end must be equalTo (new LocalDate(2011, 3, 28))
-//    }
   }
 }
 
@@ -161,11 +151,6 @@ class ShortFirstStubScheduleSpec extends SpecificationWithJUnit with DataTables 
         4 !(2009, 4, 28) !(2010, 4, 28) |
         5 !(2010, 4, 28) !(2011, 4, 28) |> test(schedule)
     }
-
-//    "the stub period should have a reference start 2005-4-28 and end 2006-4-28" in {
-//      schedule(0).reference.start must be equalTo (new LocalDate(2005, 4, 28))
-//      schedule(0).reference.end must be equalTo (new LocalDate(2006, 4, 28))
-//    }
   }
 }
 
@@ -185,10 +170,5 @@ class LongFirstStubScheduleSpec extends SpecificationWithJUnit with DataTables w
         3 !(2009, 4, 28) !(2010, 4, 28) |
         4 !(2010, 4, 28) !(2011, 4, 28) |> test(schedule)
     }
-
-//    "the stub period should have a reference start 2006-4-28 and end 2007-4-28" in {
-//      schedule(0).reference.start must be equalTo (new LocalDate(2006, 4, 28))
-//      schedule(0).reference.end must be equalTo (new LocalDate(2007, 4, 28))
-//    }
   }
 }

@@ -93,4 +93,4 @@ trait LongStub extends ScheduleGenerator {
   def testDateForPoint(i: Int):LocalDate = dateForPoint(i+1)
 }
 
-abstract case class ScheduleDefinition(startDate:LocalDate, endDate:LocalDate, frequency:Period) extends ScheduleGenerator
+case class ScheduleDefinition(startDate:LocalDate, endDate:LocalDate, frequency:Period)
