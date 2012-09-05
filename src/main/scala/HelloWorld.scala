@@ -23,9 +23,9 @@ import org.scala_tools.time.Imports.Period._
 
 object HelloWorld extends App {
 
-  val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1), NoStub)
+  val schedule = ScheduleGenerator.generateNormalScheduleList(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1), NoStub)
 
-  schedule.foreach(println(_))
+  schedule.foreach(println)
 
 
 }

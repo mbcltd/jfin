@@ -25,23 +25,18 @@ import mbc.jfin.datemath._
 
 object ScheduleGenerator {
 
-  def generateSchedulePeriods(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType):List[(LocalDate,LocalDate)] = {
-    val dateList = generateScheduleList(start,end,frequency,stub)
-    dateList.dropRight(1).zip(dateList.drop(1))
-  }
+  def generateNormalScheduleList(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType):List[LocalDate] = ScheduleDefinitionForStubType(stub, start, end, frequency).generateNormalSchedule
+  def generateReferenceScheduleList(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType):List[LocalDate] = ScheduleDefinitionForStubType(stub, start, end, frequency).generateReferenceSchedule
 
-  def generateScheduleList(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType) = {
-    val scheduleDefinition = stub match {
-      case NoStub => new ScheduleDefinition(start,end,frequency) with RegularStub
-      case ShortFirst => new ScheduleDefinition(start,end,frequency) with ShortStub with StartStub
-      case ShortLast => new ScheduleDefinition(start,end,frequency) with ShortStub with LastStub
-      case LongFirst => new ScheduleDefinition(start,end,frequency) with LongStub with StartStub
-      case LongLast => new ScheduleDefinition(start,end,frequency) with LongStub with LastStub
+  val listToPeriods = (dates:List[LocalDate]) => dates.dropRight(1).zip(dates.drop(1))
+
+  private def ScheduleDefinitionForStubType(stub: StubType, start: LocalDate, end: LocalDate, frequency: Period):ScheduleGenerator = stub match {
+      case NoStub => new ScheduleDefinition(start, end, frequency) with RegularStub
+      case ShortFirst => new ScheduleDefinition(start, end, frequency) with ShortStub with StartStub
+      case ShortLast => new ScheduleDefinition(start, end, frequency) with ShortStub with LastStub
+      case LongFirst => new ScheduleDefinition(start, end, frequency) with LongStub with StartStub
+      case LongLast => new ScheduleDefinition(start, end, frequency) with LongStub with LastStub
     }
-
-    scheduleDefinition.generateSchedule
-  }
-
 }
 
 private trait ScheduleGenerator {
@@ -52,21 +47,29 @@ private trait ScheduleGenerator {
   def dateForPoint(i: Int):LocalDate
   def testDateForPoint(i: Int):LocalDate
 
-  def generateSchedule:List[LocalDate]
+  def generateNormalSchedule:List[LocalDate]
+  def generateReferenceSchedule:List[LocalDate]
   def maybeTheEndPoint(point:Int):Option[LocalDate] = maybeTheEndDate(testDateForPoint(point))
   def maybeTheEndDate(date:LocalDate):Option[LocalDate]
 
-  def generateScheduleFromPoint(point:Int):List[LocalDate] = {
+  def generateNormalScheduleFromPoint(point:Int):List[LocalDate] = {
     val nextDate = dateForPoint(point)
     val finalDate = maybeTheEndPoint(point)
-    finalDate.map( _ :: Nil ).getOrElse( nextDate :: generateScheduleFromPoint(point+1) )
+    finalDate.map( _ :: Nil ).getOrElse( nextDate :: generateNormalScheduleFromPoint(point+1) )
+  }
+
+  def generateReferenceScheduleFromPoint(point:Int):List[LocalDate] = {
+    val nextDate = dateForPoint(point)
+    val finalDate = maybeTheEndPoint(point)
+    if( finalDate.isDefined ) nextDate :: Nil else nextDate :: generateReferenceScheduleFromPoint(point+1)
   }
 
 }
 
 private trait RegularStub extends ScheduleGenerator {
   def dateForPoint(i: Int) = startDate + frequency * i
-  def generateSchedule:List[LocalDate] = startDate :: generateScheduleFromPoint(1)
+  def generateNormalSchedule:List[LocalDate] = startDate :: generateNormalScheduleFromPoint(1)
+  def generateReferenceSchedule:List[LocalDate] = startDate :: generateReferenceScheduleFromPoint(1)
   def testDateForPoint(i: Int):LocalDate = dateForPoint(i)
   def maybeTheEndDate(date:LocalDate):Option[LocalDate] = {
     assert(date<=endDate, "Regular frequency does not fit exactly into date range with NoStub")
@@ -76,14 +79,16 @@ private trait RegularStub extends ScheduleGenerator {
 
 private trait LastStub extends ScheduleGenerator {
   def dateForPoint(i: Int) = startDate + frequency * i
-  def generateSchedule:List[LocalDate] = startDate :: generateScheduleFromPoint(1)
+  def generateNormalSchedule:List[LocalDate] = startDate :: generateNormalScheduleFromPoint(1)
+  def generateReferenceSchedule:List[LocalDate] = startDate :: generateReferenceScheduleFromPoint(1)
 
   def maybeTheEndDate(date:LocalDate):Option[LocalDate] = if (date>=endDate) Some(endDate) else None
 }
 
 private trait StartStub extends ScheduleGenerator {
   def dateForPoint(i: Int) = endDate - frequency * i
-  def generateSchedule:List[LocalDate] = (endDate :: generateScheduleFromPoint(1)).reverse
+  def generateNormalSchedule:List[LocalDate] = (endDate :: generateNormalScheduleFromPoint(1)).reverse
+  def generateReferenceSchedule:List[LocalDate] = (endDate :: generateReferenceScheduleFromPoint(1)).reverse
 
   def maybeTheEndDate(date:LocalDate):Option[LocalDate] = if (date<=startDate) Some(startDate) else None
 }
