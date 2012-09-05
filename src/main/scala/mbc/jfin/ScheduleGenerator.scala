@@ -26,7 +26,7 @@ import mbc.jfin.datemath._
 object ScheduleGenerator {
   def generateSchedule(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType) = {
     val scheduleDefinition = stub match {
-      case NoStub => new ScheduleDefinition(start,end,frequency) with ShortStub with LastStub
+      case NoStub => new ScheduleDefinition(start,end,frequency) with RegularStub
       case ShortFirst => new ScheduleDefinition(start,end,frequency) with ShortStub with StartStub
       case ShortLast => new ScheduleDefinition(start,end,frequency) with ShortStub with LastStub
       case LongFirst => new ScheduleDefinition(start,end,frequency) with LongStub with StartStub
@@ -50,28 +50,36 @@ trait ScheduleGenerator {
   def testDateForPoint(i: Int):LocalDate
 
   def generateSchedule:List[LocalDate]
-
-  def maybeTheEnd(point:Int):Option[LocalDate] = {
-    val date = testDateForPoint(point)
-    if (date>=endDate) Some(endDate) else if (date<=startDate) Some(startDate) else None
-  }
+  def maybeTheEndPoint(point:Int):Option[LocalDate] = maybeTheEndDate(testDateForPoint(point))
+  def maybeTheEndDate(date:LocalDate):Option[LocalDate]
 
   def generateScheduleFromPoint(point:Int):List[LocalDate] = {
     val nextDate = dateForPoint(point)
-    val finalDate = maybeTheEnd(point)
+    val finalDate = maybeTheEndPoint(point)
     finalDate.map( _ :: Nil ).getOrElse( nextDate :: generateScheduleFromPoint(point+1) )
   }
 
 }
 
+trait RegularStub extends ScheduleGenerator {
+  def dateForPoint(i: Int) = startDate + frequency * i
+  def generateSchedule:List[LocalDate] = startDate :: generateScheduleFromPoint(1)
+  def testDateForPoint(i: Int):LocalDate = dateForPoint(i)
+  def maybeTheEndDate(date:LocalDate):Option[LocalDate] = if (date>=endDate) Some(endDate) else if (date<=startDate) Some(startDate) else None
+}
+
 trait LastStub extends ScheduleGenerator {
   def dateForPoint(i: Int) = startDate + frequency * i
   def generateSchedule:List[LocalDate] = startDate :: generateScheduleFromPoint(1)
+
+  def maybeTheEndDate(date:LocalDate):Option[LocalDate] = if (date>=endDate) Some(endDate) else None
 }
 
 trait StartStub extends ScheduleGenerator {
   def dateForPoint(i: Int) = endDate - frequency * i
   def generateSchedule:List[LocalDate] = (endDate :: generateScheduleFromPoint(1)).reverse
+
+  def maybeTheEndDate(date:LocalDate):Option[LocalDate] = if (date<=startDate) Some(startDate) else None
 }
 
 trait ShortStub extends ScheduleGenerator {
