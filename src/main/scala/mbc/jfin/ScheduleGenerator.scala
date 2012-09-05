@@ -65,7 +65,10 @@ trait RegularStub extends ScheduleGenerator {
   def dateForPoint(i: Int) = startDate + frequency * i
   def generateSchedule:List[LocalDate] = startDate :: generateScheduleFromPoint(1)
   def testDateForPoint(i: Int):LocalDate = dateForPoint(i)
-  def maybeTheEndDate(date:LocalDate):Option[LocalDate] = if (date>=endDate) Some(endDate) else if (date<=startDate) Some(startDate) else None
+  def maybeTheEndDate(date:LocalDate):Option[LocalDate] = {
+    assert(date<=endDate, "Regular frequency does not fit exactly into date range with NoStub")
+    if (date==endDate) Some(endDate) else None
+  }
 }
 
 trait LastStub extends ScheduleGenerator {
