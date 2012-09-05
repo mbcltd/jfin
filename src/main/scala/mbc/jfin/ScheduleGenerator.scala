@@ -24,7 +24,13 @@ import org.scala_tools.time.Imports._
 import mbc.jfin.datemath._
 
 object ScheduleGenerator {
-  def generateSchedule(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType) = {
+
+  def generateSchedulePeriods(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType):List[(LocalDate,LocalDate)] = {
+    val dateList = generateScheduleList(start,end,frequency,stub)
+    dateList.dropRight(1).zip(dateList.drop(1))
+  }
+
+  def generateScheduleList(start:LocalDate, end:LocalDate, frequency:Period, stub:StubType) = {
     val scheduleDefinition = stub match {
       case NoStub => new ScheduleDefinition(start,end,frequency) with RegularStub
       case ShortFirst => new ScheduleDefinition(start,end,frequency) with ShortStub with StartStub
@@ -33,11 +39,8 @@ object ScheduleGenerator {
       case LongLast => new ScheduleDefinition(start,end,frequency) with LongStub with LastStub
     }
 
-    convertToTuple( scheduleDefinition.generateSchedule )
+    scheduleDefinition.generateSchedule
   }
-
-
-  val convertToTuple = (dates:List[LocalDate]) => dates.dropRight(1).zip(dates.drop(1))
 
 }
 

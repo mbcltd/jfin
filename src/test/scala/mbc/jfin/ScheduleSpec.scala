@@ -37,7 +37,7 @@ trait TheTest {
 class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
 
   "An annual schedule with no stub from 2006-3-28 to 2011-3-28" should {
-    val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 3, 28), years(1), NoStub)
+    val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 3, 28), years(1), NoStub)
 
     "contain 5 periods" in {
       schedule must have size (5)
@@ -55,7 +55,7 @@ class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   }
 
   "A quarterly schedule with no stub from 2006-03-28 to 2007-03-28" should {
-    val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2007, 3, 28), months(3), NoStub)
+    val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2007, 3, 28), months(3), NoStub)
 
     "contain 4 periods" in {
       schedule must have size (4)
@@ -71,7 +71,7 @@ class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   }
 
   "A quarterly schedule with no stub from 2006-03-31 to 2007-03-31" should {
-    val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 31), new LocalDate(2007, 3, 31), months(3), NoStub)
+    val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 31), new LocalDate(2007, 3, 31), months(3), NoStub)
 
     "contain 4 periods" in {
       schedule must have size (4)
@@ -89,12 +89,12 @@ class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
 
   "An annual schedule with no stub from 2006-03-28 to 2011-02-28" should {
     "fail to generate an irregular schedule" in {
-      ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1), NoStub) must throwA[AssertionError]
+      ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1), NoStub) must throwA[AssertionError]
     }
   }
 
   "An annual schedule with a short last stub from 2006-3-28 to 2011-4-28" should {
-    val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), ShortLast)
+    val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), ShortLast)
 
     "contain 6 periods" in {
       schedule must have size (6)
@@ -112,7 +112,7 @@ class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   }
 
   "An annual schedule with a long last stub from 2006-3-28 to 2011-4-28" should {
-    val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), LongLast)
+    val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), LongLast)
 
     "contain 5 periods" in {
       schedule must have size (5)
@@ -129,7 +129,7 @@ class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   }
 
   "An annual schedule with a short first stub from 2006-3-28 to 2011-4-28" should {
-    val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), ShortFirst)
+    val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), ShortFirst)
 
     "contain 6 periods" in {
       schedule must have size (6)
@@ -147,7 +147,7 @@ class ScheduleSpec extends SpecificationWithJUnit with DataTables with TheTest {
   }
 
   "An annual schedule with a long first stub from 2006-3-28 to 2011-4-28" should {
-    val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), LongFirst)
+    val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 4, 28), years(1), LongFirst)
 
     "contain 5 periods" in {
       schedule must have size (5)

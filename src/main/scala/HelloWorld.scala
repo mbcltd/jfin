@@ -26,7 +26,7 @@ object HelloWorld extends App {
 
   val scheduleGenerator = new ScheduleDefinition(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1)) with LastStub with LongStub
 
-  val schedule = ScheduleGenerator.generateSchedule(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1), NoStub)
+  val schedule = ScheduleGenerator.generateSchedulePeriods(new LocalDate(2006, 3, 28), new LocalDate(2011, 2, 28), years(1), NoStub)
 
   schedule.foreach(println(_))
 
